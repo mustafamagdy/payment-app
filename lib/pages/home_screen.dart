@@ -6,8 +6,6 @@ import '../component/app_icon_button.dart';
 import '../component/colors.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -88,68 +86,7 @@ class HomeScreen extends StatelessWidget {
             top: 40,
             child: GestureDetector(
               onTap: () {
-                showModalBottomSheet(
-                    barrierColor: Colors.transparent,
-                    backgroundColor: Colors.transparent,
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (ctx) {
-                      final height = size.height - top - 40;
-                      return Container(
-                        height: height,
-                        margin: const EdgeInsets.only(top: 50),
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 80,
-                              right: 0,
-                              left: 0,
-                              child: Container(
-                                color: AppColor.halfOval.withOpacity(0.1),
-                                height: height,
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 40,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColor.mainColor,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                height: 250,
-                                width: 65,
-                                child: Column(
-                                  children: [
-                                    AppIconButton(
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                      },
-                                      icon: Icons.close,
-                                    ),
-                                    SizedBox(height: 5),
-                                    AppIconButton(
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                      },
-                                      icon: Icons.add,
-                                      label: 'Add',
-                                    ),
-                                    AppIconButton(
-                                      onPressed: () {
-                                        Navigator.of(ctx).pop();
-                                      },
-                                      icon: Icons.history,
-                                      label: 'History',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    });
+                _showDropMenu(context, size.height, top);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -175,6 +112,74 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Future<dynamic> _showDropMenu(
+      BuildContext context, double height, double top) {
+    return showModalBottomSheet(
+        isDismissible: false,
+        barrierColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) {
+          final newHeight = height - top - 40;
+          return Container(
+            height: newHeight,
+            margin: const EdgeInsets.only(top: 50),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 80,
+                  right: 0,
+                  left: 0,
+                  child: Container(
+                    color: AppColor.halfOval.withOpacity(0.1),
+                    height: newHeight,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 36,
+                  child: AnimatedContainer(
+                    duration: Duration(seconds: 5),
+                    height: 250,
+                    width: 65,
+                    decoration: BoxDecoration(
+                      color: AppColor.mainColor,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Column(
+                      children: [
+                        AppIconButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          icon: Icons.close,
+                        ),
+                        SizedBox(height: 5),
+                        AppIconButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          icon: Icons.add,
+                          label: 'Add',
+                        ),
+                        AppIconButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          icon: Icons.history,
+                          label: 'History',
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
   _trxList(Size size) {
     return Positioned(
       top: (size.height * 0.3) + 10,
@@ -182,7 +187,7 @@ class HomeScreen extends StatelessWidget {
       left: 0,
       child: Container(
         width: size.width,
-        height: size.height - 110,
+        height: size.height - 200,
         child: ListView.builder(
           padding: EdgeInsets.only(top: 10),
           itemCount: 10,
